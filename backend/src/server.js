@@ -13,7 +13,7 @@ const app = express();
 const _dirname = path.resolve();
 
 //middleware
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV !== 'production') {
   app.use(cors({
     origin: "http://localhost:5173",
   }));
@@ -30,9 +30,9 @@ app.use(rateLimiter)
 
 app.use("/api/notes", notesRoutes);
 
-app.use(express.static(path.join(_dirname, '../frontend/dist')));
 
 if (process.env.NODE_ENV === 'production') { 
+    app.use(express.static(path.join(_dirname, '../frontend/dist')));
     app.get('*', (req, res) => {
     res.sendFile(path.join(_dirname, '../frontend', 'dist', 'index.html'));
   });
